@@ -9,6 +9,10 @@ services:
       - back_static:/backend/static
     depends_on:
       - db
+    networks:
+      - backend
+    restart: unless-stopped
+
   db:
     image: postgres:17.2-alpine3.21
     ports:
@@ -19,9 +23,15 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
     restart: unless-stopped
 
 volumes:
   postgres_data:
   back_media:
   back_static:
+
+networks:
+  backend:
+    driver: bridge
